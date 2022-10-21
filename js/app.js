@@ -66,6 +66,10 @@ function consultarAPI(ciudad, pais) {
     const appId = 'baff472b86ea5101b23295870499945a';
     //URL desde donde se haran las peticiones
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
+    
+    //llamr spinner para mostrar antes de traer los datos
+    spinner();
+    
     //fetch()
     fetch( url )
         .then( respuesta => respuesta.json() )
@@ -90,17 +94,42 @@ function consultarAPI(ciudad, pais) {
 function mostrarClima( datos ) {
 
     //destructuring de un objeto dentro de otro objeto
-    const { main: { temp, temp_max, temp_min } } = datos;
+    const { name, main: { temp, temp_max, temp_min } } = datos;
     //temperatura normal 
     const centigrados = kelvinACentigrados( temp );
-    
+    const tempMax = kelvinACentigrados( temp_max );
+    const tempMin = kelvinACentigrados( temp_min );
+
+    //nombre de la ciudad
+    const nombreCiudad = document.createElement('p');
+    nombreCiudad.textContent = `Clima en: ${ name }`;
+    nombreCiudad.classList.add('font-bold', 'text-2xl');
+
+    //clima actual
     const actual = document.createElement('p');
     actual.innerHTML = `${ centigrados } &#8451`;
     actual.classList.add('font-bold', 'text-6xl');
+
+    //temperatura maxima
+    const tMaxima = document.createElement('p');
+    tMaxima.innerHTML = `Temperatura Max: ${ tempMax } &#8451`;
+    tMaxima.classList.add('text-xl');
+    //temperatura minima
+    const tMinima = document.createElement('p');
+    tMinima.innerHTML = `Temperatura Min: ${ tempMin } &#8451`;
+    tMinima.classList.add('text-xl');
+
     //insertar actual a resultadoDiv
     const resultadoDiv = document.createElement('div');
     resultadoDiv.classList.add('text-center', 'text-white');
+    //nombre de ciudad
+    resultadoDiv.appendChild( nombreCiudad );
+    //clima actual
     resultadoDiv.appendChild( actual );
+    //temp maxima
+    resultadoDiv.appendChild( tMaxima );
+    //temp maxima
+    resultadoDiv.appendChild( tMinima );
     //renderizar
     resultado.appendChild( resultadoDiv );
 }
@@ -118,4 +147,28 @@ function limpiarHTML() {
     while ( resultado.firstChild ) {
         resultado.removeChild( resultado.firstChild );
     }
+}
+//funcion para mostrar el spinner
+function spinner() {
+
+    //limpiar el html anterior`
+    limpiarHTML();
+
+    const divSpinner = document.createElement('div');
+    divSpinner.classList.add('sk-cube-grid');
+
+    divSpinner.innerHTML = `<div class="sk-cube sk-cube1"></div>
+                            <div class="sk-cube sk-cube2"></div>
+                            <div class="sk-cube sk-cube3"></div>
+                            <div class="sk-cube sk-cube4"></div>
+                            <div class="sk-cube sk-cube5"></div>
+                            <div class="sk-cube sk-cube6"></div>
+                            <div class="sk-cube sk-cube7"></div>
+                            <div class="sk-cube sk-cube8"></div>
+                            <div class="sk-cube sk-cube9"></div>
+                    `;
+
+    //renderizar
+    resultado.appendChild( divSpinner );
+
 }
