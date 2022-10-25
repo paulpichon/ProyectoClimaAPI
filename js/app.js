@@ -1,4 +1,4 @@
-//246.- primeros pasos con la APP
+//246.- primeros pasos con la APP 21/10/2022
 
 //variables
 const container = document.querySelector('.container');
